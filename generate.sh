@@ -8,7 +8,7 @@ stop_stage=3
 input_dir=./data/seame
 out_dir=./exp/seame_gen_cs_unigram
 process=40
-unit='bi'
+unit='uni'
 
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
   ###steps for creating supervision, recording and bins ::
