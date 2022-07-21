@@ -8,3 +8,5 @@ Steps to run unigram generation:
 bash generate.sh
 
 param to fix inside generate.sh
+
+input, output 
