@@ -402,13 +402,15 @@ def create_cs_audio(generated_text, output_directory_path, supervisions, recordi
         delta = (end_time - start_time)
         print('making sentence time: ', delta)
 
-        start_time = datetime.now()
         #cut.save_audio(output_directory_path + '/' + file_name + '.wav')
-        torchaudio.save(output_directory_path+'/'+file_name+'.wav', torch.from_numpy(cut.load_audio()),sample_rate=16000, encoding="PCM_S", bits_per_sample=16)
-        end_time = datetime.now()
-        delta = (end_time - start_time)
+        print(output_directory_path+'/'+file_name+'.wav')
+        if cut is not None:
+            start_time = datetime.now()
+            torchaudio.save(output_directory_path+'/'+file_name+'.wav', torch.from_numpy(cut.load_audio()),sample_rate=16000, encoding="PCM_S", bits_per_sample=16)
+            end_time = datetime.now()
+            delta = (end_time - start_time)
 
-        print('saving audio time: ', delta)
+            print('saving audio time: ', delta)
 
 
 if __name__ == "__main__":

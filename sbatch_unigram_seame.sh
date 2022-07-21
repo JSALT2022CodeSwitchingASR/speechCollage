@@ -3,9 +3,9 @@
 #SBATCH -p cpu-all
 #SBATCH -c 40 #number of CPUs needed
 
-module load gcc6 slurm cmake
+#module load gcc6 slurm cmake
 
-. /alt-asr/shchowdhury/tools/miniconda3/etc/profile.d/conda.sh && conda deactivate && conda activate /jsalt1/exp/wp2/audio_cs_aug/exp1/cs_generated_audio/tmp/dorsaenv_clone
+#. /alt-asr/shchowdhury/tools/miniconda3/etc/profile.d/conda.sh && conda deactivate && conda activate /jsalt1/exp/wp2/audio_cs_aug/exp1/cs_generated_audio/tmp/dorsaenv_clone
 
 
 inputlist=$1

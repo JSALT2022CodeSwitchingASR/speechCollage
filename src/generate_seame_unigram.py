@@ -57,7 +57,7 @@ def main():
 
     supervisions, recordings, non_freq_sups, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5, percents = sp2.load_dicts_modified(sup_path, rec_path, bins_path)
 
-    inlist=open(args.input, 'r+').readlines()
+    inlist=open(args.input, 'r', encoding='utf-8').readlines()
     outdir=args.output
 
     total = len(inlist)
