@@ -2,13 +2,13 @@
 #set -e
 #set -u
 #set -o pipefail
-stage=2
-stop_stage=3
+stage=3
+stop_stage=4
 
 input_dir=./data/arcs
-out_dir=./exp/ar_gen_cs_bigram
+out_dir=./exp/ar_gen_cs_bigram_cleaned
 process=40
-unit='uni'
+unit='bi'
 
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
   ###steps for creating supervision, recording and bins ::
@@ -35,21 +35,21 @@ fi
 
 ##Unigram generation
 if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
-  array=( $( ls $input_dir/splits/. ) )
-
-  for i in "${array[@]}"; do
+  #array=( $( ls $input_dir/splits/. ) )
+   #array= ( "02" "03" )
+  for i in 02 03; do #"${array[@]}"; do "${array[@]}"; do
     echo "$i"
-    sbatch sbatch_unigram_seame.sh $input_dir/splits/$i $out_dir $process
+    sbatch sbatch_unigram_ar.sh $input_dir/splits/$i $out_dir $input_dir/ $process
   done
 fi
 
 ##Bigram generation
 if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then
-  array=( $( ls $input_dir/splits/. ) )
-
-  for i in "${array[@]}"; do
+  #array=( $( ls $input_dir/splits/. ) )
+  #array= ( "02" "03" )
+  for i in 02 03; do #"${array[@]}"; do
     echo "$i"
-    sbatch sbatch_bigram.sh $input_dir/splits/$i $out_dir $input_dir $process
+    sbatch sbatch_bigram.sh $input_dir/splits/$i $out_dir $input_dir/ $process
   done
 fi
 ##+ smoothing

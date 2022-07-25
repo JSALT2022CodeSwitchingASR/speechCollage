@@ -59,8 +59,8 @@ def main():
 
     recs,uni_v,uni_bins,bi_v,bi_bins,percents=sp2.load_dicts(rec_path,uni_v_path, uni_bins_path, bi_v_path, bi_bins_path)
     
-    #inlist=open(args.input, 'rb', encoding='utf8', errors='ignore').readlines()
-    inlist=open(args.input,'r').readlines()
+    inlist=open(args.input, 'r+', encoding='utf8', errors='ignore').readlines()
+    # inlist=open(args.input,'r').readlines()
     outdir=args.output
 
     total = len(inlist)

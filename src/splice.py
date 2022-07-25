@@ -122,12 +122,14 @@ def find_token(token, b, bins, recordings):
 def create_cs_audio(generated_text, output_directory_path, supervisions, recordings, bins, percents): 
     length = len(generated_text)
     transcripts=[]
+    alignments={}
     for i in range(length):
         line = generated_text[i].split()
         file_name = line[0]
 
         start_time = datetime.now()
         transcript=file_name + ' '
+        alignment=[]
         sentence_token = line[1:]
         cut = None
         energy_to_match = 0.0
@@ -140,18 +142,18 @@ def create_cs_audio(generated_text, output_directory_path, supervisions, recordi
                 if not cut: 
                     c,e=take_random(token,supervisions,recordings)
                     cut=c
-                    print(token,cut.recording.id, cut.start,cut.duration)
+                    alignment.append((token,cut.recording.id, cut.start,cut.duration))
                     energy_to_match=e			
                 else:
                     if (token in bins['low_freq']): 
                         c,e=take_random(token,bins['low_freq'],recordings)
                         energy_to_match=e
-                        print(token,c.recording.id,c.start,c.duration)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
                         cut = cut.append(c)
                     else:
                         b = find_bin(energy_to_match, percents)
                         c, e = find_token(token, b, bins, recordings)
-                        print(token,c.recording.id, c.start,c.duration)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
                         cut = cut.append(c)
                         energy_to_match = e
         
@@ -166,6 +168,7 @@ def create_cs_audio(generated_text, output_directory_path, supervisions, recordi
         if(cut):
             #cut.save_audio(output_directory_path + '/' + file_name + '.wav')
             transcripts.append(transcript.strip())
+            alignments[file_name]=alignment
             torchaudio.save(output_directory_path+'/'+file_name+'.wav', torch.from_numpy(cut.load_audio()),sample_rate=16000, encoding="PCM_S", bits_per_sample=16)
         end_time = datetime.now()
         delta = (end_time - start_time)
@@ -175,6 +178,8 @@ def create_cs_audio(generated_text, output_directory_path, supervisions, recordi
     with open(output_directory_path+'/transcripts.txt','w') as f:
         for t in transcripts:
             f.write(t+'\n')
+    with open(output_directory_path+'/alignments.json', 'w') as f: 
+        json.dump(alignments,f) 
 
 
 if __name__ == "__main__":

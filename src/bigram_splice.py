@@ -167,21 +167,24 @@ def create_segments(ranges, line,uni_v,bi_v):
 def create_cs_audio(generated_text,output_directory_path,recordings,uni_v,uni_bins,bi_v,bi_bins,percents):
     length=len(generated_text)
     transcripts=[]
+    alignments={}
     for i in range(length):
         line=generated_text[i].split()
         filename=line[0]
         ranges=find_boundaries(line[1:])
         #print(line[1:])
         segments=create_segments(ranges,line[1:],uni_v,bi_v)
-        #print(segments)
+        print(segments)
         start_time=datetime.now()
         transcript=filename+' '
         cut=None
+        alignment=[]
         energy_to_match=0.0
         for j in range(len(segments)):
             seg=segments[j]
             l=len(seg)
             seg=' '.join(seg)
+            token=seg
             #print(seg)
             if(l==1 and seg in uni_v):
                 if(not cut):
@@ -189,26 +192,30 @@ def create_cs_audio(generated_text,output_directory_path,recordings,uni_v,uni_bi
                         #print('here1')
                         c,e=take_random(seg,uni_bins['low_freq'],recordings)
                         cut=c
-                        print(seg,c.recording.id, cut.start,cut.duration)
+                        #print(seg,c.recording.id, cut.start,cut.duration)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
                         energy_to_match=e 
                     else:
                         #print('here2')
                         random_bin=random.randint(1,5)
                         c,e=find_token(seg,random_bin,uni_bins,recordings)
                         cut=c
-                        print(seg,c.recording.id, cut.start,cut.duration)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
+                        #print(seg,c.recording.id, cut.start,cut.duration)
                         energy_to_match=e
                 else:
                     if(seg in uni_bins['low_freq']):
                         c,e=take_random(seg,uni_bins['low_freq'],recordings)
                         energy_to_match=e
-                        print(seg,c.recording.id, c.start,c.duration)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
+                        #print(seg,c.recording.id, c.start,c.duration)
                         cut=cut.append(c)
                     else:
                         b=find_bin(energy_to_match,percents)
                         c,e=find_token(seg,b,uni_bins,recordings)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
                         cut=cut.append(c)
-                        print(seg,c.recording.id, c.start,c.duration)
+                        #print(seg,c.recording.id, c.start,c.duration)
                         energy_to_match=e
                 transcript+=(seg+ ' ')
             if(l==2 and seg in bi_v):
@@ -217,25 +224,29 @@ def create_cs_audio(generated_text,output_directory_path,recordings,uni_v,uni_bi
                     if(seg in bi_bins['low_freq']):
                         c,e=take_random(seg,bi_bins['low_freq'],recordings)
                         cut=c
-                        print(seg,c.recording.id, c.start,c.duration)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
+                        #print(seg,c.recording.id, c.start,c.duration)
                         energy_to_match=e  
                     else:
                         random_bin=random.randint(1,5)
                         c,e=find_token(seg,random_bin,bi_bins,recordings)
                         cut=c
-                        print(seg,c.recording.id, cut.start,cut.duration)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
+                        #print(seg,c.recording.id, cut.start,cut.duration)
                         energy_to_match=e
                 else:
                     #print('here4')
                     if(seg in bi_bins['low_freq']):
                         c,e=take_random(seg,bi_bins['low_freq'],recordings)
                         energy_to_match=e
+                        alignment.append((token,c.recording.id, c.start,c.duration))
                         print(seg,c.recording.id, c.start,c.duration)
                         cut=cut.append(c)
                     else:
                         b=find_bin(energy_to_match,percents)
                         c,e=find_token(seg,b,bi_bins,recordings)
                         cut=cut.append(c)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
                         print(seg,c.recording.id, c.start,c.duration)
                         energy_to_match=e
 
@@ -248,6 +259,7 @@ def create_cs_audio(generated_text,output_directory_path,recordings,uni_v,uni_bi
         if(cut):
             #cut.save_audio(output_directory_path+'/bi_'+filename+'.wav')	
             transcripts.append(transcript.strip())
+            alignments[filename]=alignment
             torchaudio.save(output_directory_path+'/bi_'+filename+'.wav',torch.from_numpy(cut.load_audio()),sample_rate=16000, encoding="PCM_S", bits_per_sample=16)
         end_time=datetime.now()
         delta = (end_time-start_time)
@@ -257,6 +269,8 @@ def create_cs_audio(generated_text,output_directory_path,recordings,uni_v,uni_bi
     with open(output_directory_path+'/bi_transcripts.txt','w') as f:
         for t in transcripts:
             f.write(t+'\n')
+    with open(output_directory_path+'/alignments.json', 'w') as f:
+        json.dump(alignments,f)
 '''if __name__ == "__main__":
     rec_dict_path='/jsalt1/exp/wp2/audio_cs_aug/exp1/speech_gen_wp/data/recording_dict.json'
     unigram_sups_path='/jsalt1/exp/wp2/audio_cs_aug/exp1/speech_gen_wp/data/unigram_vocab.json'
