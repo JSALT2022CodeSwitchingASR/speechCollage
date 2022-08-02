@@ -17,7 +17,7 @@ proc=$4
 
 mkdir -p $outdir
 
-python3 src/generate_bigram.py \
+python3 src/generate_bigram_norm.py \
   --input $inputlist \
   --output $outdir \
   --data $data \

@@ -10,7 +10,7 @@ def setup_sup_dict(ctm_file_path, recording_dict_path,sup_dict_folder):
 	lines=ctm_file.readlines()
 	supervision_segments={}
 	for i in range(0,len(lines)-1):
-		print(i)
+		#print(i)
 		line_1=lines[i].split()
 		line_2=lines[i+1].split()
 
