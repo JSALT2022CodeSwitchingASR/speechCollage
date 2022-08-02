@@ -4,7 +4,7 @@ wav.scp ==> for monolingual data
 
 text => cs text that we want to generate
 
-Steps to run unigram generation:
-bash generate.sh
-
-param to fix inside generate.sh
+Steps to run generation: 
+1) create conda environment with the package-list.txt 
+2) change inside generate.sh the unit length -> uni or bi 
+3) change inside generate.sh norm -> true or false 
