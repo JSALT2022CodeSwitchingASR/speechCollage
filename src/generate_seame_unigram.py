@@ -10,6 +10,8 @@ import multiprocessing
 import time
 import argparse
 import splice as sp2
+from lhotse import Recording
+import torchaudio; torchaudio.set_audio_backend("soundfile")
 
 
 parser = argparse.ArgumentParser(description='CS Audio generation pipeline')
@@ -56,6 +58,7 @@ def main():
     rec_path=data_path+'recording_dict.json'
 
     supervisions, recordings, non_freq_sups, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5, percents = sp2.load_dicts_modified(sup_path, rec_path, bins_path)
+    recordings = {key: (Recording.from_file(val[0]).move_to_memory(), val[1]) for key, val in recordings.items()}
 
     inlist=open(args.input, 'r+').readlines()
     outdir=args.output
