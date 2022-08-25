@@ -13,6 +13,7 @@ import torch
 import os.path
 import numpy as np
 import sys
+import codecs
 from datetime import datetime
 
 random.seed(10)
@@ -80,7 +81,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_1[token]
             sup = random.sample(matched_sups, 1)[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -90,7 +91,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_2[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -100,7 +101,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_3[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -110,7 +111,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_4[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -121,7 +122,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_5[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -133,7 +134,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_2[token]
             sup = random.sample(matched_sups, 1)[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -143,7 +144,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_1[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -153,7 +154,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_3[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -163,7 +164,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_4[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -174,7 +175,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_5[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -186,7 +187,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_3[token]
             sup = random.sample(matched_sups, 1)[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -196,7 +197,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_2[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -207,7 +208,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_4[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -217,7 +218,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_1[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -228,7 +229,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_5[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -240,7 +241,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_4[token]
             sup = random.sample(matched_sups, 1)[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -250,7 +251,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_3[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -261,7 +262,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_5[token]
             sup = matched_sups[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -273,7 +274,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_2[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -283,7 +284,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_1[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -295,7 +296,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_5[token]
             sup = random.sample(matched_sups, 1)[0]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -305,7 +306,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_4[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -316,7 +317,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_3[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -328,7 +329,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_2[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -338,7 +339,7 @@ def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bi
             matched_sups = sups_bin_1[token]
             sup = matched_sups[-1]
             energy_to_match = recordings[sup[1]][1]
-            recording = Recording.from_file(recordings[sup[1]][0])
+            recording = recordings[sup[1]][0]
             sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                      text=sup[0])
             c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel, recording=recording,
@@ -361,6 +362,7 @@ def create_cs_audio(generated_text, output_directory_path, supervisions, recordi
         sentence_token = line[1:]
         cut = None
         energy_to_match = 0.0
+        alignment = []
         for j in range(len(sentence_token)):
             token = sentence_token[j]
             # print(token)
@@ -373,42 +375,57 @@ def create_cs_audio(generated_text, output_directory_path, supervisions, recordi
                     # print(sup)
                     # print(recordings[sup[1]])
                     energy_to_match = recordings[sup[1]][1]
-                    recording = Recording.from_file(recordings[sup[1]][0])
+                    recording = recordings[sup[1]][0]
                     sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3], channel=0,
                                              text=sup[0])
 
                     cut = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel,
                                   recording=recording, supervisions=[sup])
+                    alignment.append((cut.supervisions[0].recording_id, 1, cut.supervisions[0].start, cut.supervisions[0].duration, cut.supervisions[0].text))
 
                 else:
                     if (token in non_freq_sups):
                         matched_sups = non_freq_sups[token]
                         sup = random.sample(matched_sups, 1)[0]
                         energy_to_match = recordings[sup[1]][1]
-                        recording = Recording.from_file(recordings[sup[1]][0])
+                        recording = recordings[sup[1]][0]
                         sup = SupervisionSegment(id=sup[0], recording_id=sup[1], start=sup[2], duration=sup[3],
                                                  channel=0, text=sup[0])
 
                         c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel,
                                     recording=recording, supervisions=[sup])
                         cut = cut.append(c)
+                        alignment.append((c.supervisions[0].recording_id, 1, c.supervisions[0].start, c.supervisions[0].duration, c.supervisions[0].text))
                     else:
                         b = find_bin(energy_to_match, percents)
                         c, e = find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5,
                                           recordings)
                         cut = cut.append(c)
                         energy_to_match = e
+                        alignment.append((c.supervisions[0].recording_id, 1, c.supervisions[0].start, c.supervisions[0].duration, c.supervisions[0].text))
+
         end_time = datetime.now()
         delta = (end_time - start_time)
         print('making sentence time: ', delta)
 
-        start_time = datetime.now()
-        #cut.save_audio(output_directory_path + '/' + file_name + '.wav')
-        torchaudio.save(output_directory_path+'/'+file_name+'.wav', torch.from_numpy(cut.load_audio()),sample_rate=16000, encoding="PCM_S", bits_per_sample=16)
-        end_time = datetime.now()
-        delta = (end_time - start_time)
+        if cut is not None:
+            start_time = datetime.now()
+            audio = cut.load_audio()
+            end_time = datetime.now()
+            delta = (end_time - start_time)
+            print('loading audio time: ', delta)
 
-        print('saving audio time: ', delta)
+
+            start_time = datetime.now()
+            torchaudio.save(output_directory_path+'/'+file_name+'.wav', torch.from_numpy(audio),sample_rate=16000, encoding="PCM_S", bits_per_sample=16)
+            end_time = datetime.now()
+            delta = (end_time - start_time)
+            print('saving audio time: ', delta)
+
+            with codecs.open(output_directory_path+"/"+file_name+".ctm", "w", "utf-8") as f:
+                for line in alignment:
+                    print("%s %d %.2f %.2f %s" % line, file=f)
+
 
 
 if __name__ == "__main__":
