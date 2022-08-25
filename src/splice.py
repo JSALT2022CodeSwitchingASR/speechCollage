@@ -24,7 +24,7 @@ def load_dicts_modified(sup_dict_path, rec_dict_path, bin_dict_path):
     recordings = json.load(open(rec_dict_path))
     bins = json.load(open(bin_dict_path))
 
-    non_freq_sups, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5= bins['low_freq'], bins['bin1'], bins['bin2'], bins['bin3'], bins['bin4'], bins['bin5']
+    #non_freq_sups, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5= bins['low_freq'], bins['bin1'], bins['bin2'], bins['bin3'], bins['bin4'], bins['bin5']
 
     energies = []
     for rec in recordings.keys():
@@ -35,7 +35,7 @@ def load_dicts_modified(sup_dict_path, rec_dict_path, bin_dict_path):
 
     np_arr = np.array(energies)
     percents = np.percentile(np_arr, percentiles)
-    return supervisions, recordings, non_freq_sups, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5, percents
+    return supervisions, recordings, bins, percents
 
 # Original load dicts func
 def load_dicts(sup_dict_path, rec_dict_path, non_freq_dict_path, sup_bin_1_dict_path, sup_bin_2_dict_path,
@@ -75,6 +75,7 @@ def find_bin(energy, percentiles):
         return 5
 
 # Todo: fix! make modular
+
 def find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5, recordings):
     if (b == 1):
         if (token in sups_bin_1 and len(sups_bin_1[token])>=1):
@@ -353,21 +354,24 @@ def create_cs_audio(generated_text, output_directory_path, supervisions, recordi
 
     # filename=input_file_path.split('/')[-1]
     length = len(generated_text)
+    transcripts=[]
+    alignments={}
     for i in range(length):
         line = generated_text[i].split()
         file_name = line[0]
 
         start_time = datetime.now()
-        # code_switched_sentence=generated_text[i]
+        transcript=file_name + ' '
+        alignment=[]
         sentence_token = line[1:]
         cut = None
         energy_to_match = 0.0
         alignment = []
         for j in range(len(sentence_token)):
             token = sentence_token[j]
-            # print(token)
-            # print(supervisions)
+            print(token)
             if (token in supervisions):
+
                 if not cut:
                     matched_sups = supervisions[token]
                     # print(matched_sups)
@@ -394,19 +398,23 @@ def create_cs_audio(generated_text, output_directory_path, supervisions, recordi
 
                         c = MonoCut(id=sup.id, start=sup.start, duration=sup.duration, channel=sup.channel,
                                     recording=recording, supervisions=[sup])
+
                         cut = cut.append(c)
                         alignment.append((c.supervisions[0].recording_id, 1, c.supervisions[0].start, c.supervisions[0].duration, c.supervisions[0].text))
                     else:
                         b = find_bin(energy_to_match, percents)
-                        c, e = find_token(token, b, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5,
-                                          recordings)
+                        c, e = find_token(token, b, bins, recordings)
+                        alignment.append((token,c.recording.id, c.start,c.duration))
                         cut = cut.append(c)
                         energy_to_match = e
+
                         alignment.append((c.supervisions[0].recording_id, 1, c.supervisions[0].start, c.supervisions[0].duration, c.supervisions[0].text))
+
 
         end_time = datetime.now()
         delta = (end_time - start_time)
         print('making sentence time: ', delta)
+
 
         if cut is not None:
             start_time = datetime.now()
@@ -427,12 +435,18 @@ def create_cs_audio(generated_text, output_directory_path, supervisions, recordi
                     print("%s %d %.2f %.2f %s" % line, file=f)
 
 
+    with open(output_directory_path+'/transcripts.txt','w') as f:
+        for t in transcripts:
+            f.write(t+'\n')
+    with open(output_directory_path+'/alignments.json', 'w') as f: 
+        json.dump(alignments,f) 
+
 
 if __name__ == "__main__":
     sup_dict_path = sys.argv[1]
     rec_dict_path = sys.argv[2]
     bins_dict_path = sys.argv[3]
-    # non_freq_dict_path = sys.argv[3]
+    # non_freq_dict_path = sys.argv[3]i
     # sup_bin_1_dict_path = sys.argv[4]
     # sup_bin_2_dict_path = sys.argv[5]
     # sup_bin_3_dict_path = sys.argv[6]
@@ -442,10 +456,9 @@ if __name__ == "__main__":
     input_path = sys.argv[4]
     output_path = sys.argv[5]
 
-    supervisions, recordings, non_freq_sups, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5, percents = load_dicts_modified(
+    supervisions, recordings, bins, percents = load_dicts_modified(
         sup_dict_path, rec_dict_path, bins_dict_path)
         # non_freq_dict_path, sup_bin_1_dict_path, sup_bin_2_dict_path, sup_bin_3_dict_path,
         # sup_bin_4_dict_path, sup_bin_5_dict_path)
     generated_text = open(input_path, 'r').readlines()
-    create_cs_audio(generated_text, output_path, supervisions, recordings, non_freq_sups, sups_bin_1, sups_bin_2,
-                    sups_bin_3, sups_bin_4, sups_bin_5, percents)
+    create_cs_audio(generated_text, output_path, supervisions, recordings, bins, percents)

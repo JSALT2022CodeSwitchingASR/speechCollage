@@ -101,9 +101,10 @@ if __name__ == "__main__":
 	path_to_supervision=sys.argv[1]
 	path_to_recording=sys.argv[2]
 	output_dir=sys.argv[3]
+	threshold=int(sys.argv[4])
 	sups,recs=load_dicts(path_to_supervision, path_to_recording)
 	
-	threshold=10 #for unigrams
+	#threshold=10 #for unigrams
 	non_freq_sups,sups_new=create_non_freq_words_sups(sups, threshold)
 	sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5 = create_bins_by_percentile(recs, sups_new)
         
@@ -115,9 +116,13 @@ if __name__ == "__main__":
 	ngram_bins['bin4']=sups_bin_4
 	ngram_bins['bin5']=sups_bin_5 
 	
+	if(threshold==10):
+		with open(output_dir+'/unigram_bins.json', 'w') as f:
+			json.dump(ngram_bins,f) 
 
-	with open(output_dir+'/unigram_bins.json', 'w') as f:
-		json.dump(ngram_bins,f) 
+	elif(threshold==2):
+		with open(output_dir + '/bigram_bins.json', 'w') as f:
+			json.dump(ngram_bins,f)
 
 
 

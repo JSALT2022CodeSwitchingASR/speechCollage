@@ -9,9 +9,7 @@ import os, sys
 import multiprocessing
 import time
 import argparse
-import splice as sp2
-from lhotse import Recording
-import torchaudio; torchaudio.set_audio_backend("soundfile")
+import bigram_splice as sp2
 
 
 parser = argparse.ArgumentParser(description='CS Audio generation pipeline')
@@ -20,7 +18,7 @@ parser.add_argument('--input', type=str, required=True,
                     help='Input text file including ..')
 parser.add_argument('--output', type=str, required=True,
                     help='Output directory including ..')
-
+parser.add_argument('--data', type=str, required=True, help='data path')
 
 # parser.add_argument('--recordings', type=str, required=True,
 #                     help='Precomputed Recording json file including ..')
@@ -40,8 +38,8 @@ args = parser.parse_args()
 print(args)
 
 
-def generate(generated_text, output_directory_path, supervisions, recordings, bins, percents):
-    sp2.create_cs_audio(generated_text, output_directory_path, supervisions, recordings, bins, percents)
+def generate(generated_text,output_directory_path,recordings,uni_v,uni_bins,bi_v,bi_bins,percents):
+    sp2.create_cs_audio(generated_text,output_directory_path,recordings,uni_v,uni_bins,bi_v,bi_bins,percents)
 
 def chunks(list, n):
     return [list[i:i+n] for i in range(0, len(list), n)]
@@ -52,18 +50,17 @@ def main():
 
     proc_count=args.process
 
-    data_path='./data/arcs/' #args.data
-    sup_path=data_path+'supervisions.json' #args.supervisions
-    bins_path=data_path+'unigram_bins.json'
+    data_path=args.data #'./data/' #
+    uni_v_path=data_path+'unigram_vocab.json' #args.supervisions
+    uni_bins_path=data_path+'unigram_bins.json'
     rec_path=data_path+'recording_dict.json'
+    bi_v_path=data_path+'bigram_vocab.json' 
+    bi_bins_path=data_path+'bigram_bins.json' 
 
-
-    supervisions, recordings, non_freq_sups, sups_bin_1, sups_bin_2, sups_bin_3, sups_bin_4, sups_bin_5, percents = sp2.load_dicts_modified(sup_path, rec_path, bins_path)
-    recordings = {key: (Recording.from_file(val[0]).move_to_memory(), val[1]) for key, val in recordings.items()}
-
-
-    #inlist=open(args.input, 'rb', encoding='utf8', errors='ignore').readlines()
-    inlist=open(args.input,'r').readlines()
+    recs,uni_v,uni_bins,bi_v,bi_bins,percents=sp2.load_dicts(rec_path,uni_v_path, uni_bins_path, bi_v_path, bi_bins_path)
+    
+    inlist=open(args.input, 'r+', encoding='utf8', errors='ignore').readlines()
+    # inlist=open(args.input,'r').readlines()
     outdir=args.output
 
     total = len(inlist)
@@ -75,7 +72,7 @@ def main():
     processes = []
 
     for i, s in enumerate(slice):
-        p = multiprocessing.Process(target=generate, args=(s,outdir,supervisions, recordings, bins, percents))
+        p = multiprocessing.Process(target=generate, args=(s,outdir,recs,uni_v,uni_bins,bi_v,bi_bins,percents))
         p.start()
         processes.append(p)
 
