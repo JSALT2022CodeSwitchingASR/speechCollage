@@ -1,6 +1,6 @@
 import json 
 import os
-from lhotse import * 
+from lhotse import audio
 import sys
 #setup recording dictionary give wave.scp file and 
 #save it as recording_dict.json in rec_output_folder
